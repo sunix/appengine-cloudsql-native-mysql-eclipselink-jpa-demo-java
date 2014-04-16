@@ -11,18 +11,28 @@
   <properties>
     <appengine.app.appId>your-app-id</appengine.app.appId>
     <appengine.app.version>1</appengine.app.version>
-    <appengine.target.version>1.8.1</appengine.target.version>
+    <appengine.target.version>1.9.2</appengine.target.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <cloudsql.url>jdbc:google:mysql://your-instance-name/demo?user=root</cloudsql.url>
-    <cloudsql.url.dev>jdbc:mysql://localhost/demo?user=root</cloudsql.url.dev>
+    <cloudsql.url>jdbc:google:mysql://your-instance-name/demo?user=root&amp;amp;password=changeit</cloudsql.url>
+    <cloudsql.url.dev>jdbc:mysql://localhost/demo?user=root&amp;amp;password=changeit</cloudsql.url.dev>
   </properties>
-
+  
   <dependencies>
     <!-- Compile/runtime dependencies -->
     <dependency>
       <groupId>com.google.appengine</groupId>
       <artifactId>appengine-api-1.0-sdk</artifactId>
       <version>${appengine.target.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.appengine</groupId>
+      <artifactId>appengine-endpoints</artifactId>
+      <version>${appengine.target.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.inject</groupId>
+      <artifactId>javax.inject</artifactId>
+      <version>1</version>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -78,9 +88,17 @@
         <artifactId>maven-war-plugin</artifactId>
         <version>2.3</version>
         <configuration>
-          <archiveClasses>true</archiveClasses>
+          <webXml>${project.build.directory}/generated-sources/appengine-endpoints/WEB-INF/web.xml</webXml>
           <webResources>
-            <!-- in order to interpolate version from pom into appengine-web.xml -->
+            <resource>
+              <!-- this is relative to the pom.xml directory -->
+              <directory>${project.build.directory}/generated-sources/appengine-endpoints</directory>
+              <!-- the list has a default value of ** -->
+              <includes>
+                <include>WEB-INF/*.discovery</include>
+                <include>WEB-INF/*.api</include>
+              </includes>
+            </resource>
             <resource>
               <directory>${basedir}/src/main/webapp/WEB-INF</directory>
               <filtering>true</filtering>
@@ -89,12 +107,22 @@
           </webResources>
         </configuration>
       </plugin>
-
       <plugin>
         <groupId>com.google.appengine</groupId>
         <artifactId>appengine-maven-plugin</artifactId>
         <version>${appengine.target.version}</version>
+        <configuration>
+          <enableJarClasses>false</enableJarClasses>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>endpoints_get_discovery_doc</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
+
     </plugins>
   </build>
 
