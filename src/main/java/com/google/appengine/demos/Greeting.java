@@ -17,16 +17,18 @@
 package com.google.appengine.demos;
 
 import java.util.Date;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "Greeting")
 public class Greeting {
-    private Long   id;
+    protected Long   id;
 
-    private String author;
-    private Date   date;
-    private String content;
+    protected String author;
+    protected Date   date;
+    protected String content;
+
 
     public Greeting() {
     }
@@ -37,13 +39,24 @@ public class Greeting {
         this.content = content;
     }
 
+    public Greeting(Long id) {
+        this.id = id;
+    }
+
+
+    public Greeting(Long id, String author, String content) {
+        this.id = id;
+        this.author = author;
+        this.content = content;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     public Long getId() {
         return id;
     }
 
-    private void setId(Long id) {
+    protected void setId(Long id) {
         this.id = id;
     }
 
@@ -71,5 +84,13 @@ public class Greeting {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Greeting) {
+            return id != null && id.equals(((Greeting)obj).getId());
+        }
+        return super.equals(obj);
     }
 }
