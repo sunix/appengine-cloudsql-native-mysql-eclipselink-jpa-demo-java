@@ -4,7 +4,7 @@
         <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
         <init-param>
             <param-name>services</param-name>
-            <param-value>com.google.appengine.demos.GreetingsEndPoint,com.google.appengine.demos.GreetingsEndPointInMemory</param-value>
+            <param-value>com.google.appengine.demos.GreetingsEndPoint,com.google.appengine.demos.GreetingsEndPointInMemory,com.google.appengine.demos.factory.FactoryEndPoint</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>

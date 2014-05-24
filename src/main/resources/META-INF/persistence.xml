@@ -8,6 +8,7 @@
 
   <persistence-unit name="Demo">
     <class>com.google.appengine.demos.Greeting</class>
+    <class>com.google.appengine.demos.factory.Factory</class>
 
     <properties>
       <property name="javax.persistence.jdbc.user" value="root" />
